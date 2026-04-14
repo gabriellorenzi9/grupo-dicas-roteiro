@@ -1,46 +1,49 @@
+import { list, put, del } from '@vercel/blob';
+
 export default async function handler(req, res) {
+  // POST = salvar roteiro
+  if (req.method === 'POST') {
+    try {
+      const { id, html } = req.body;
+
+      if (!id || !html) {
+        res.status(400).json({ error: 'ID e HTML são obrigatórios' });
+        return;
+      }
+
+      const blob = await put(`roteiros/${id}.html`, html, {
+        access: 'public',
+        contentType: 'text/html; charset=utf-8'
+      });
+
+      res.status(200).json({ url: blob.url, id: id });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+    return;
+  }
+
+  // GET = exibir roteiro
   const { id } = req.query;
 
   if (!id) {
-    res.status(400).send('ID não informado');
+    res.status(400).send('<html><body><h1>ID não informado</h1></body></html>');
     return;
   }
-
-  const token = process.env.AIRTABLE_TOKEN;
-  const baseId = process.env.AIRTABLE_BASE_ID;
-
-  if (!token || !baseId) {
-    res.status(500).send('<html><body><h1>Erro de configuração</h1><p>Token existe: ' + (!!token) + '</p><p>BaseID existe: ' + (!!baseId) + '</p></body></html>');
-    return;
-  }
-
-  const url = `https://api.airtable.com/v0/${baseId}/Pedidos/${id}`;
 
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    const data = await response.json();
+    const response = await fetch(`${process.env.BLOB_URL}roteiros/${id}.html`);
 
     if (!response.ok) {
-      res.status(404).send('<html><body><h1>Erro ao buscar roteiro</h1><p>Status: ' + response.status + '</p><p>URL: ' + url + '</p><p>Token primeiros 10: ' + token.substring(0,10) + '...</p><p>' + JSON.stringify(data) + '</p></body></html>');
+      res.status(404).send('<html><body><h1>Roteiro não encontrado</h1><p>Verifique o link.</p></body></html>');
       return;
     }
 
-    const html = data.fields.HTML_Roteiro;
-
-    if (!html) {
-      res.status(200).send('<html><body><h1>Roteiro em preparação</h1><p>Tente novamente em alguns minutos!</p></body></html>');
-      return;
-    }
-
+    const html = await response.text();
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.status(200).send(html);
 
   } catch (err) {
-    res.status(500).send('<html><body><h1>Erro interno</h1><p>' + err.message + '</p></body></html>');
+    res.status(500).send('<html><body><h1>Erro</h1><p>' + err.message + '</p></body></html>');
   }
 }
