@@ -8,6 +8,12 @@ export default async function handler(req, res) {
 
   const token = process.env.AIRTABLE_TOKEN;
   const baseId = process.env.AIRTABLE_BASE_ID;
+
+  if (!token || !baseId) {
+    res.status(500).send('<html><body><h1>Erro de configuração</h1><p>Token existe: ' + (!!token) + '</p><p>BaseID existe: ' + (!!baseId) + '</p></body></html>');
+    return;
+  }
+
   const url = `https://api.airtable.com/v0/${baseId}/Pedidos/${id}`;
 
   try {
@@ -20,7 +26,7 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      res.status(404).send('<html><body><h1>Erro ao buscar roteiro</h1><p>Status: ' + response.status + '</p><p>' + JSON.stringify(data) + '</p></body></html>');
+      res.status(404).send('<html><body><h1>Erro ao buscar roteiro</h1><p>Status: ' + response.status + '</p><p>URL: ' + url + '</p><p>Token primeiros 10: ' + token.substring(0,10) + '...</p><p>' + JSON.stringify(data) + '</p></body></html>');
       return;
     }
 
