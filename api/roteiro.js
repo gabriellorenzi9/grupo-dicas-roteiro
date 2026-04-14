@@ -2,26 +2,28 @@ export default async function handler(req, res) {
   const { id } = req.query;
 
   if (!id) {
-    res.status(400).json({ error: 'ID não informado' });
+    res.status(400).send('ID não informado');
     return;
   }
 
+  const token = process.env.AIRTABLE_TOKEN;
+  const baseId = process.env.AIRTABLE_BASE_ID;
+  const url = `https://api.airtable.com/v0/${baseId}/Pedidos/${id}`;
+
   try {
-    const response = await fetch(
-      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/Pedidos/${id}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.AIRTABLE_TOKEN}`
-        }
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
-    );
+    });
+
+    const data = await response.json();
 
     if (!response.ok) {
-      res.status(404).send('<html><body><h1>Roteiro não encontrado</h1><p>Verifique o link.</p></body></html>');
+      res.status(404).send('<html><body><h1>Erro ao buscar roteiro</h1><p>Status: ' + response.status + '</p><p>' + JSON.stringify(data) + '</p></body></html>');
       return;
     }
 
-    const data = await response.json();
     const html = data.fields.HTML_Roteiro;
 
     if (!html) {
@@ -33,6 +35,6 @@ export default async function handler(req, res) {
     res.status(200).send(html);
 
   } catch (err) {
-    res.status(500).send('<html><body><h1>Erro</h1><p>Tente novamente.</p></body></html>');
+    res.status(500).send('<html><body><h1>Erro interno</h1><p>' + err.message + '</p></body></html>');
   }
 }
