@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu Roteiro - Grupo Dicas</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        .loading {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; font-family: 'Poppins', sans-serif;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid #E0F7FA;
+            border-top-color: #00BCD4; border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error {
+            text-align: center; padding: 60px 20px; font-family: 'Poppins', sans-serif;
+        }
+        .error h1 { color: #1A1A2E; font-size: 24px; }
+        .error p { color: #6B7280; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="color:#6B7280;">Carregando seu roteiro...</p>
+    </div>
+    <div id="content"></div>
+
+    <script>
+        const AIRTABLE_TOKEN = 'COLE_SEU_TOKEN_AIRTABLE_AQUI';
+        const BASE_ID = 'COLE_SEU_BASE_ID_AQUI';
+        const TABLE_NAME = 'Pedidos';
+
+        async function loadRoteiro() {
+            const params = new URLSearchParams(window.location.search);
+            const recordId = params.get('id');
+
+            if (!recordId) {
+                showError('Roteiro não encontrado', 'O link parece estar incompleto.');
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${recordId}`,
+                    { headers: { 'Authorization': `Bearer ${AIRTABLE_TOKEN}` } }
+                );
+
+                if (!response.ok) throw new Error('Não encontrado');
+
+                const data = await response.json();
+                const html = data.fields.HTML_Roteiro;
+
+                if (!html) {
+                    showError('Roteiro em preparação', 'Seu roteiro ainda está sendo gerado. Tente novamente em alguns minutos!');
+                    return;
+                }
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').innerHTML = html;
+
+            } catch (err) {
+                showError('Roteiro não encontrado', 'Não conseguimos localizar seu roteiro. Verifique o link.');
+            }
+        }
+
+        function showError(title, message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').innerHTML =
+                '<div class="error"><h1>' + title + '</h1><p>' + message + '</p></div>';
+        }
+
+        loadRoteiro();
+    </script>
+</body>
+</html>
