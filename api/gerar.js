@@ -11,6 +11,67 @@ export default async function handler(req, res) {
   try {
     const d = req.body;
 
+    // 1. Salvar no Airtable (Status: Gerando)
+    let recordId = null;
+    try {
+      const airtableRes = await fetch(
+        'https://api.airtable.com/v0/' + process.env.AIRTABLE_BASE_ID + '/Pedidos',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + process.env.AIRTABLE_TOKEN,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            records: [{
+              fields: {
+                Nome: d.nome,
+                Email: d.email,
+                Destino: d.destino,
+                Data_Ida: d.dataChegada,
+                Data_Volta: d.dataPartida,
+                Duracao_Dias: Number(d.duracaoDias),
+                Pessoas: Number(d.quantasPessoas),
+                Viajantes: d.viajantes,
+                Orcamento: d.orcamento,
+                Interesses: d.interesses,
+                Status: 'Gerando'
+              }
+            }]
+          })
+        }
+      );
+      const airtableData = await airtableRes.json();
+      if (airtableData.records && airtableData.records[0]) {
+        recordId = airtableData.records[0].id;
+      }
+    } catch (e) {
+      // Airtable falhou mas continuamos
+    }
+
+    // Usar recordId ou gerar um ID unico
+    const roteiroId = recordId || ('rot_' + Date.now());
+
+    // 2. Enviar email imediatamente com o link
+    try {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'Grupo Dicas <onboarding@resend.dev>',
+          to: [d.email],
+          subject: 'Seu roteiro personalizado esta pronto!',
+          html: '<div style="font-family:Poppins,sans-serif;max-width:600px;margin:0 auto;padding:40px 20px;"><div style="text-align:center;margin-bottom:30px;"><h1 style="color:#00BCD4;font-size:28px;">GRUPO<span style="color:#E91E8C;">DICAS</span></h1></div><h2 style="color:#1A1A2E;">Ola, ' + d.nome.split(' ')[0] + '!</h2><p style="color:#6B7280;font-size:16px;line-height:1.6;">Seu roteiro personalizado esta sendo preparado com muito carinho! Em alguns minutos ele estara disponivel no link abaixo:</p><div style="text-align:center;margin:30px 0;"><a href="https://grupo-dicas-roteiro.vercel.app/api/roteiro?id=' + roteiroId + '" style="background:linear-gradient(135deg,#00BCD4,#0097A7);color:white;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;display:inline-block;">Ver meu Roteiro</a></div><p style="color:#6B7280;font-size:14px;">Se o roteiro ainda nao aparecer, aguarde alguns minutos e tente novamente.</p><p style="color:#6B7280;font-size:14px;">Boa viagem!</p><p style="color:#6B7280;font-size:14px;">Equipe Grupo Dicas</p><hr style="border:none;border-top:1px solid #E5E7EB;margin:30px 0;"/><p style="color:#9CA3AF;font-size:12px;text-align:center;">www.grupodicas.com</p></div>'
+        })
+      });
+    } catch (e) {
+      // Email falhou mas continuamos com a geracao
+    }
+
+    // 3. Chamar a Claude para gerar o roteiro
     const prompt = [
       'Voce e um especialista em viagens do Grupo Dicas (grupodicas.com), o maior site de dicas de viagem do Brasil. Sua missao e criar roteiros de viagem personalizados, detalhados e com foco em ajudar brasileiros a economizar.',
       '',
@@ -28,7 +89,7 @@ export default async function handler(req, res) {
       '- Primeira vez no destino: ' + d.primeiraVez,
       '',
       'FORMATO DE SAIDA',
-      'Gere APENAS codigo HTML completo. NAO inclua explicacoes, markdown ou backticks (```). O HTML deve comecar com <!DOCTYPE html>.',
+      'Gere APENAS codigo HTML completo. NAO inclua explicacoes, markdown ou backticks. O HTML deve comecar com <!DOCTYPE html>.',
       'Use fonte Poppins do Google Fonts.',
       'Use estas variaveis CSS: --primary: #00BCD4; --primary-dark: #0097A7; --primary-light: #E0F7FA; --magenta: #E91E8C; --text: #1A1A2E; --text-light: #6B7280; --white: #FFFFFF; --gray: #F3F4F6; --success: #10B981; --warning: #F59E0B; --danger: #EF4444;',
       'Design responsivo, moderno e profissional. Pronto para visualizar no navegador.',
@@ -225,7 +286,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-20250514',
+        model: 'claude-sonnet-4-20250514',
         max_tokens: 20000,
         messages: [{ role: 'user', content: prompt }]
       })
@@ -234,6 +295,22 @@ export default async function handler(req, res) {
     const claudeData = await claudeResponse.json();
 
     if (!claudeData.content || !claudeData.content[0]) {
+      // Atualizar Airtable com erro
+      if (recordId) {
+        try {
+          await fetch(
+            'https://api.airtable.com/v0/' + process.env.AIRTABLE_BASE_ID + '/Pedidos/' + recordId,
+            {
+              method: 'PATCH',
+              headers: {
+                'Authorization': 'Bearer ' + process.env.AIRTABLE_TOKEN,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ fields: { Status: 'Erro' } })
+            }
+          );
+        } catch (e) {}
+      }
       res.status(500).json({ error: 'Claude nao retornou conteudo', details: claudeData });
       return;
     }
@@ -241,15 +318,33 @@ export default async function handler(req, res) {
     let html = claudeData.content[0].text;
     html = html.replace(/^```html\s*/i, '').replace(/```\s*$/i, '').trim();
 
-    const blob = await put('roteiros/' + d.recordId + '.html', html, {
+    // 4. Salvar no Blob
+    const blob = await put('roteiros/' + roteiroId + '.html', html, {
       access: 'public',
       contentType: 'text/html; charset=utf-8',
       addRandomSuffix: false
     });
 
+    // 5. Atualizar Airtable (Status: Enviado)
+    if (recordId) {
+      try {
+        await fetch(
+          'https://api.airtable.com/v0/' + process.env.AIRTABLE_BASE_ID + '/Pedidos/' + recordId,
+          {
+            method: 'PATCH',
+            headers: {
+              'Authorization': 'Bearer ' + process.env.AIRTABLE_TOKEN,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fields: { Status: 'Enviado' } })
+          }
+        );
+      } catch (e) {}
+    }
+
     res.status(200).json({
       success: true,
-      url: 'https://grupo-dicas-roteiro.vercel.app/api/roteiro?id=' + d.recordId
+      url: 'https://grupo-dicas-roteiro.vercel.app/api/roteiro?id=' + roteiroId
     });
 
   } catch (err) {
