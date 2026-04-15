@@ -314,7 +314,9 @@ console.log('Dados recebidos:', JSON.stringify(d).substring(0, 200));
       })
     });
 
-    const claudeData = await claudeResponse.json();
+const claudeData = await claudeResponse.json();
+    console.log('Claude status:', claudeResponse.status);
+    console.log('Claude resposta:', JSON.stringify(claudeData).substring(0, 500));
 
     if (!claudeData.content || !claudeData.content[0]) {
       if (recordId) {
