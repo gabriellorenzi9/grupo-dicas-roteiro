@@ -7,6 +7,10 @@
     {
       "source": "/api/gerar",
       "destination": "/api/gerar.js"
+    },
+    {
+      "source": "/api/teste",
+      "destination": "/api/teste.js"
     }
   ]
 }
