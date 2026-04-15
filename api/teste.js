@@ -1,18 +1,15 @@
-fetch('/api/teste', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    nome: 'Teste Final',
-    email: 'gabriel.lorenzi@grupodicas.com',
-    destino: 'Roma 3 dias',
-    dataChegada: '2026-08-01',
-    dataPartida: '2026-08-04',
-    duracaoDias: 3,
-    quantasPessoas: 2,
-    viajantes: 'Casal',
-    criancas: false,
-    orcamento: 'Moderado',
-    interesses: 'Gastronomia',
-    primeiraVez: true
-  })
-}).then(r => r.json()).then(d => console.log('RESULTADO:', d))
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(200).json({ status: 'ok', method: req.method });
+  }
+
+  var token = process.env.AIRTABLE_TOKEN;
+  var baseId = process.env.AIRTABLE_BASE_ID;
+
+  return res.status(200).json({
+    tokenExiste: token ? true : false,
+    tokenInicio: token ? token.substring(0, 8) : 'vazio',
+    baseId: baseId || 'vazio',
+    dados: req.body
+  });
+}
