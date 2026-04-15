@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const d = req.body;
-
+console.log('Dados recebidos:', JSON.stringify(d).substring(0, 200));
     // 1. Salvar no Airtable (Status: Gerando)
     let recordId = null;
     try {
@@ -45,8 +45,8 @@ export default async function handler(req, res) {
       if (airtableData.records && airtableData.records[0]) {
         recordId = airtableData.records[0].id;
       }
-    } catch (e) {
-      // Airtable falhou mas continuamos
+     } catch (e) {
+      console.log('Airtable erro:', e.message);
     }
 
     // Usar recordId ou gerar um ID unico
@@ -89,10 +89,11 @@ export default async function handler(req, res) {
         })
       });
     } catch (e) {
-      // Email falhou mas continuamos com a geracao
+      console.log('Email erro:', e.message);
     }
 
     // 3. Chamar a Claude para gerar o roteiro
+    console.log('Chamando Claude com roteiroId:', roteiroId);
     const prompt = [
       'Voce e um especialista em viagens do Grupo Dicas (grupodicas.com), o maior site de dicas de viagem do Brasil. Sua missao e criar roteiros de viagem personalizados, detalhados e com foco em ajudar brasileiros a economizar.',
       '',
