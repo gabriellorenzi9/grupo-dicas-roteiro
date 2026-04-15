@@ -308,7 +308,7 @@ console.log('Dados recebidos:', JSON.stringify(d).substring(0, 200));
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-20250514',
+        model: 'claude-opus-4-6',
         max_tokens: 32000,
         messages: [{ role: 'user', content: prompt }]
       })
