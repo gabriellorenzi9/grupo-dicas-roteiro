@@ -1,6 +1,6 @@
 import { put } from '@vercel/blob';
 
-export const maxDuration = 300;
+export const maxDuration = 900;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
