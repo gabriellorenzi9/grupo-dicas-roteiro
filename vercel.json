@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/roteiro",
+      "destination": "/api/roteiro.js"
+    },
+    {
+      "source": "/api/gerar",
+      "destination": "/api/gerar.js"
+    }
+  ]
+}
