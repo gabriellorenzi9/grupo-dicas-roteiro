@@ -25,16 +25,16 @@ export default async function handler(req, res) {
           body: JSON.stringify({
             records: [{
               fields: {
-                Nome: d.nome,
-                Email: d.email,
-                Destino: d.destino,
-                Data_Ida: d.dataChegada,
-                Data_Volta: d.dataPartida,
-                Duracao_Dias: Number(d.duracaoDias),
-                Pessoas: Number(d.quantasPessoas),
-                Viajantes: d.viajantes,
-                Orcamento: d.orcamento,
-                Interesses: d.interesses,
+                Nome: d.nome || '',
+                Email: d.email || '',
+                Destino: d.destino || '',
+                Data_Ida: d.dataChegada || '',
+                Data_Volta: d.dataPartida || '',
+                Duracao_Dias: Number(d.duracaoDias) || 0,
+                Pessoas: Number(d.quantasPessoas) || 0,
+                Viajantes: d.viajantes || '',
+                Orcamento: d.orcamento || '',
+                Interesses: d.interesses || '',
                 Status: 'Gerando'
               }
             }]
@@ -53,6 +53,13 @@ export default async function handler(req, res) {
     const roteiroId = recordId || ('rot_' + Date.now());
 
     // 2. Enviar email imediatamente com o link
+    var nomeFirst = '';
+    try {
+      nomeFirst = d.nome.split(' ')[0];
+    } catch(e) {
+      nomeFirst = d.nome || 'Viajante';
+    }
+
     try {
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -63,8 +70,22 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           from: 'Grupo Dicas <onboarding@resend.dev>',
           to: [d.email],
-          subject: '🎉 Seu roteiro personalizado está pronto!',
-          html: '<div style="font-family:Poppins,sans-serif;max-width:600px;margin:0 auto;padding:40px 20px;"><div style="text-align:center;margin-bottom:30px;"><h1 style="color:#00BCD4;font-size:28px;">GRUPO<span style="color:#E91E8C;">DICAS</span></h1></div><h2 style="color:#1A1A2E;">Olá, ' + d.nome.split(' ')[0] + '! 🎉</h2><p style="color:#6B7280;font-size:16px;line-height:1.6;">O seu roteiro personalizado está sendo preparado! O tempo para gerarmos ele, pode variar entre 5 e 40 minutos. Assim que estiver pronto, ele estará disponível no link abaixo:</p><div style="text-align:center;margin:30px 0;"><a href="https://grupo-dicas-roteiro.vercel.app/api/roteiro?id=' + roteiroId + '" style="background:#00BCD4;color:#ffffff;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;display:inline-block;">🗺️ Ver meu Roteiro</a></div><p style="color:#6B7280;font-size:14px;line-height:1.6;"><strong>IMPORTANTE:</strong> Se ao clicar no link acima, o seu roteiro não está abrindo, é porque ele ainda não terminou de ser gerado. Aguarde alguns minutos e tente novamente. Esse será o link para você sempre acessá-lo, então já salve ele e compartilhe com quem for viajar com vocês. :)</p><p style="color:#6B7280;font-size:14px;">Boa viagem! ✈️</p><p style="color:#6B7280;font-size:14px;">Equipe Grupo Dicas</p><hr style="border:none;border-top:1px solid #E5E7EB;margin:30px 0;"/><p style="color:#9CA3AF;font-size:12px;text-align:center;">www.grupodicas.com</p></div>'
+          subject: '\uD83C\uDF89 Seu roteiro personalizado est\u00E1 pronto!',
+          html: '<div style="font-family:Poppins,sans-serif;max-width:600px;margin:0 auto;padding:40px 20px;">'
+            + '<div style="text-align:center;margin-bottom:30px;">'
+            + '<h1 style="color:#00BCD4;font-size:28px;">GRUPO<span style="color:#E91E8C;">DICAS</span></h1>'
+            + '</div>'
+            + '<h2 style="color:#1A1A2E;">Ol\u00E1, ' + nomeFirst + '! \uD83C\uDF89</h2>'
+            + '<p style="color:#6B7280;font-size:16px;line-height:1.6;">O seu roteiro personalizado est\u00E1 sendo preparado! O tempo para gerarmos ele, pode variar entre 5 e 40 minutos. Assim que estiver pronto, ele estar\u00E1 dispon\u00EDvel no link abaixo:</p>'
+            + '<div style="text-align:center;margin:30px 0;">'
+            + '<a href="https://grupo-dicas-roteiro.vercel.app/api/roteiro?id=' + roteiroId + '" style="background:#00BCD4;color:#ffffff;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;display:inline-block;">\uD83D\uDDFA\uFE0F Ver meu Roteiro</a>'
+            + '</div>'
+            + '<p style="color:#6B7280;font-size:14px;line-height:1.6;"><strong>IMPORTANTE:</strong> Se ao clicar no link acima, o seu roteiro n\u00E3o est\u00E1 abrindo, \u00E9 porque ele ainda n\u00E3o terminou de ser gerado. Aguarde alguns minutos e tente novamente. Esse ser\u00E1 o link para voc\u00EA sempre acess\u00E1-lo, ent\u00E3o j\u00E1 salve ele e compartilhe com quem for viajar com voc\u00EAs. :)</p>'
+            + '<p style="color:#6B7280;font-size:14px;">Boa viagem! \u2708\uFE0F</p>'
+            + '<p style="color:#6B7280;font-size:14px;">Equipe Grupo Dicas</p>'
+            + '<hr style="border:none;border-top:1px solid #E5E7EB;margin:30px 0;"/>'
+            + '<p style="color:#9CA3AF;font-size:12px;text-align:center;">www.grupodicas.com</p>'
+            + '</div>'
         })
       });
     } catch (e) {
@@ -295,7 +316,6 @@ export default async function handler(req, res) {
     const claudeData = await claudeResponse.json();
 
     if (!claudeData.content || !claudeData.content[0]) {
-      // Atualizar Airtable com erro
       if (recordId) {
         try {
           await fetch(
@@ -319,7 +339,7 @@ export default async function handler(req, res) {
     html = html.replace(/^```html\s*/i, '').replace(/```\s*$/i, '').trim();
 
     // 4. Salvar no Blob
-    const blob = await put('roteiros/' + roteiroId + '.html', html, {
+    var blob = await put('roteiros/' + roteiroId + '.html', html, {
       access: 'public',
       contentType: 'text/html; charset=utf-8',
       addRandomSuffix: false
