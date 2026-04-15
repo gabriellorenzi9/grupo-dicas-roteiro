@@ -1090,23 +1090,17 @@
         primeiraVez: state.primeiraVez
       };
 
-      try {
-        fetch(WEBHOOK_URL, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(payload)
-});
+      // Envia os dados sem esperar resposta
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-        // Sucesso - mostrar tela final
+      // Mostra tela de sucesso após 1.5 segundos
+      setTimeout(function() {
         showSuccess();
-
-      } catch (err) {
-        errorEl.textContent = '❌ Ocorreu um erro ao enviar. Tente novamente em alguns segundos.';
-        errorEl.classList.add('visible');
-        btn.innerHTML = '✨ Gerar Meu Roteiro';
-        btn.disabled = false;
-        state.isGenerating = false;
-      }
+      }, 1500);
     }
 
     function showSuccess() {
