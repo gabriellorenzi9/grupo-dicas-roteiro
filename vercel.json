@@ -12,5 +12,16 @@
       "source": "/api/teste",
       "destination": "/api/teste.js"
     }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://grupodicas.com https://www.grupodicas.com https://*.grupodicas.com"
+        }
+      ]
+    }
   ]
 }
