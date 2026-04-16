@@ -891,6 +891,7 @@
       document.querySelectorAll('.step').forEach(s => s.classList.remove('visible'));
       document.getElementById('step' + n).classList.add('visible');
       state.step = n;
+      window.parent.postMessage({ type: 'grupodicas_form', event: 'form_step_' + n }, '*');
       updateDots();
 
       if (n === 4) buildResumo();
@@ -1041,6 +1042,7 @@
     async function handleSubmit() {
       if (state.isGenerating) return;
       state.isGenerating = true;
+      window.parent.postMessage({ type: 'grupodicas_form', event: 'form_submit' }, '*');
 
       const btn = document.getElementById('btnGenerate');
       btn.innerHTML = '<span class="spinner"></span> Enviando...';
@@ -1119,6 +1121,7 @@
 
       document.getElementById('successScreen').classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.parent.postMessage({ type: 'grupodicas_form', event: 'form_success' }, '*');
     }
 
     // ==================== RESET ====================
@@ -1172,6 +1175,8 @@
       updateDots();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    // Disparar evento de visualização do step 1 ao carregar
+    window.parent.postMessage({ type: 'grupodicas_form', event: 'form_step_1' }, '*');
   </script>
 
 </body>
