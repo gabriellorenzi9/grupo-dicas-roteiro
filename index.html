@@ -817,6 +817,11 @@
           <label class="field-label">Seu melhor e-mail</label>
           <input type="email" id="email" placeholder="seuemail@exemplo.com">
         </div>
+        <div class="field">
+  <label class="field-label">Seu celular (WhatsApp) 📱</label>
+  <input type="tel" id="celular" placeholder="(11) 99999-9999">
+  <p class="hint">📲 Enviaremos um aviso por SMS quando seu roteiro ficar pronto, pois muitas vezes vai para o spam.</p>
+</div>
       </div>
 
       <!-- Resumo -->
@@ -879,6 +884,7 @@
       primeiraVez: true,
       nome: '',
       email: '',
+      celular: '',
       isGenerating: false
     };
 
@@ -1014,6 +1020,10 @@
       updateStep4Btn();
     });
 
+  document.getElementById('celular').addEventListener('input', function() {
+      state.celular = this.value;
+    });
+
     function updateStep4Btn() {
       const valid = state.nome.trim() !== '' && state.email.trim() !== '' && state.email.includes('@');
       document.getElementById('btnGenerate').disabled = !valid || state.isGenerating;
@@ -1089,7 +1099,8 @@
         criancas: state.criancas,
         orcamento: orcamentoMap[state.orcamento] || state.orcamento,
         interesses: state.interesses.map(i => interessesMap[i] || i).join(', '),
-        primeiraVez: state.primeiraVez
+        primeiraVez: state.primeiraVez,
+        celular: state.celular
       };
 
       // Envia os dados sem esperar resposta
@@ -1138,6 +1149,7 @@
       state.primeiraVez = true;
       state.nome = '';
       state.email = '';
+      state.celular = '';
       state.isGenerating = false;
       state.step = 1;
 
@@ -1147,6 +1159,7 @@
       document.getElementById('dataPartida').value = '';
       document.getElementById('nome').value = '';
       document.getElementById('email').value = '';
+      document.getElementById('celular').value = '';
       document.getElementById('pessoasValue').textContent = '2';
       document.getElementById('pessoasLabel').textContent = 'pessoas';
       document.getElementById('durationBadge').classList.remove('visible');
