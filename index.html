@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grupo Dicas - Roteiro Personalizado</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/css/intlTelInput.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -187,6 +188,15 @@
       color: var(--gray-text);
       margin-top: 8px;
       line-height: 1.5;
+    }
+
+    /* intl-tel-input custom styles */
+    .iti { width: 100%; }
+    .iti__flag-container { border-radius: 12px 0 0 12px; }
+    .iti--separate-dial-code .iti__selected-flag {
+      background: var(--gray-bg);
+      border-radius: 12px 0 0 12px;
+      border-right: 2px solid var(--gray-border);
     }
 
     /* Date grid */
@@ -818,10 +828,10 @@
           <input type="email" id="email" placeholder="seuemail@exemplo.com">
         </div>
         <div class="field">
-  <label class="field-label">Seu celular (WhatsApp) 📱</label>
-  <input type="tel" id="celular" placeholder="(11) 99999-9999">
-  <p class="hint">📲 Enviaremos um aviso por SMS quando seu roteiro ficar pronto, pois muitas vezes vai para o spam.</p>
-</div>
+          <label class="field-label">Seu celular (WhatsApp) 📱</label>
+          <input type="tel" id="celular" placeholder="">
+          <p class="hint">📲 Enviaremos um aviso por SMS quando seu roteiro ficar pronto, pois muitas vezes vai para o spam.</p>
+        </div>
       </div>
 
       <!-- Resumo -->
@@ -863,9 +873,11 @@
   </main>
 
   <!-- ==================== JAVASCRIPT ==================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/js/intlTelInput.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/js/utils.js"></script>
   <script>
     // =====================================================
-    // CONFIGURAÇÃO - Cole aqui a URL do seu webhook do Make
+    // CONFIGURAÇÃO
     // =====================================================
     const WEBHOOK_URL = 'https://grupo-dicas-servidor-production.up.railway.app/gerar';
 
@@ -887,6 +899,14 @@
       celular: '',
       isGenerating: false
     };
+
+    // ==================== INTL TEL INPUT ====================
+    var iti = window.intlTelInput(document.getElementById('celular'), {
+      initialCountry: 'br',
+      preferredCountries: ['br', 'us', 'pt', 'es', 'fr', 'it', 'gb', 'de'],
+      separateDialCode: true,
+      utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/js/utils.js'
+    });
 
     // ==================== NAVIGATION ====================
     function goToStep(n) {
@@ -931,7 +951,6 @@
 
     document.getElementById('dataChegada').addEventListener('change', function() {
       state.dataChegada = this.value;
-      // Update min of partida
       document.getElementById('dataPartida').min = this.value;
       calcDuration();
       updateStep1Btn();
@@ -943,7 +962,6 @@
       updateStep1Btn();
     });
 
-    // Set min date to today
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('dataChegada').min = today;
     document.getElementById('dataPartida').min = today;
@@ -1020,8 +1038,9 @@
       updateStep4Btn();
     });
 
-  document.getElementById('celular').addEventListener('input', function() {
-      state.celular = this.value;
+    document.getElementById('celular').addEventListener('input', function() {
+      // Pega o numero completo com codigo do pais usando intl-tel-input
+      state.celular = iti.getNumber();
     });
 
     function updateStep4Btn() {
@@ -1061,7 +1080,6 @@
       const errorEl = document.getElementById('errorMsg');
       errorEl.classList.remove('visible');
 
-      // Mapear interesses para nomes legíveis
       const interessesMap = {
         cultura: 'Cultura & Museus',
         gastronomia: 'Gastronomia',
@@ -1087,6 +1105,9 @@
         luxo: 'Luxo'
       };
 
+      // Pegar numero completo com codigo do pais
+      var celularCompleto = iti.getNumber();
+
       const payload = {
         nome: state.nome,
         email: state.email,
@@ -1100,28 +1121,24 @@
         orcamento: orcamentoMap[state.orcamento] || state.orcamento,
         interesses: state.interesses.map(i => interessesMap[i] || i).join(', '),
         primeiraVez: state.primeiraVez,
-        celular: state.celular
+        celular: celularCompleto
       };
 
-      // Envia os dados sem esperar resposta
       fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
 
-      // Mostra tela de sucesso após 1.5 segundos
       setTimeout(function() {
         showSuccess();
       }, 1500);
     }
 
     function showSuccess() {
-      // Esconder steps e indicator
       document.querySelectorAll('.step').forEach(s => s.classList.remove('visible'));
       document.getElementById('stepIndicator').style.display = 'none';
 
-      // Preencher dados de sucesso
       const firstName = state.nome.split(' ')[0];
       document.getElementById('successTitle').textContent = 'Seu roteiro está sendo criado, ' + firstName + '!';
       document.getElementById('successDestino').textContent = state.destino;
@@ -1153,7 +1170,6 @@
       state.isGenerating = false;
       state.step = 1;
 
-      // Reset form fields
       document.getElementById('destino').value = '';
       document.getElementById('dataChegada').value = '';
       document.getElementById('dataPartida').value = '';
@@ -1168,7 +1184,6 @@
       document.getElementById('btnGenerate').disabled = true;
       document.getElementById('btnGenerate').innerHTML = '✨ Gerar Meu Roteiro';
 
-      // Reset selections
       document.querySelectorAll('#viajantesGrid .option-btn').forEach(b => b.classList.remove('selected'));
       document.querySelector('#viajantesGrid [data-value="casal"]').classList.add('selected');
 
@@ -1180,7 +1195,6 @@
       document.getElementById('toggleCriancas').classList.remove('on');
       document.getElementById('togglePrimeiraVez').classList.add('on');
 
-      // Show form
       document.getElementById('successScreen').classList.remove('visible');
       document.getElementById('stepIndicator').style.display = 'flex';
       document.getElementById('step1').classList.add('visible');
@@ -1188,6 +1202,7 @@
       updateDots();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
     // Disparar evento de visualização do step 1 ao carregar
     window.parent.postMessage({ type: 'grupodicas_form', event: 'form_step_1' }, '*');
   </script>
