@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grupo Dicas - Roteiro Personalizado</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/css/intlTelInput.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -32,7 +31,6 @@
       overflow-x: hidden;
     }
 
-    /* Background decorativo */
     body::before {
       content: '';
       position: absolute;
@@ -56,7 +54,6 @@
       pointer-events: none;
     }
 
-    /* Header */
     .header {
       padding: 20px 24px;
       display: flex;
@@ -67,551 +64,207 @@
       position: relative;
       z-index: 2;
     }
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .logo-area { display: flex; align-items: center; gap: 8px; }
     .logo-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       background: linear-gradient(135deg, var(--magenta) 0%, var(--primary) 100%);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 4px 12px rgba(0,188,212,0.3);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; box-shadow: 0 4px 12px rgba(0,188,212,0.3);
     }
-    .logo-text {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+    .logo-text { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
     .logo-text .magenta { color: var(--magenta); }
     .logo-text .cyan { color: var(--primary); }
 
-    /* Step indicator */
     .step-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: white;
-      padding: 8px 16px;
-      border-radius: 100px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex; align-items: center; gap: 8px; background: white;
+      padding: 8px 16px; border-radius: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .step-dot {
-      height: 8px;
-      border-radius: 100px;
-      transition: all 0.3s ease;
-    }
+    .step-dot { height: 8px; border-radius: 100px; transition: all 0.3s ease; }
     .step-dot.inactive { width: 8px; background: var(--gray-border); }
     .step-dot.active { width: 24px; background: linear-gradient(90deg, var(--primary), var(--primary-dark)); }
 
-    /* Main */
-    main {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px 24px 40px;
-      position: relative;
-      z-index: 2;
-    }
+    main { max-width: 800px; margin: 0 auto; padding: 20px 24px 40px; position: relative; z-index: 2; }
 
-    /* Steps */
     .step { display: none; animation: fadeIn 0.4s ease; }
     .step.visible { display: block; }
 
-    .step-title {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .step-title h1 {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 12px;
-      letter-spacing: -1px;
-    }
-    .step-title p {
-      font-size: 16px;
-      color: var(--text-light);
-      max-width: 500px;
-      margin: 0 auto;
-    }
+    .step-title { text-align: center; margin-bottom: 40px; }
+    .step-title h1 { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 12px; letter-spacing: -1px; }
+    .step-title p { font-size: 16px; color: var(--text-light); max-width: 500px; margin: 0 auto; }
 
-    /* Card */
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      margin-bottom: 24px;
-    }
+    .card { background: white; border-radius: 20px; padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 24px; }
 
-    /* Form fields */
     .field { margin-bottom: 24px; }
     .field:last-child { margin-bottom: 0; }
-    .field-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--dark-text);
-      margin-bottom: 8px;
-    }
-    .field-sublabel {
-      display: block;
-      font-size: 12px;
-      color: var(--text-light);
-      margin-bottom: 6px;
-    }
+    .field-label { display: block; font-size: 14px; font-weight: 600; color: var(--dark-text); margin-bottom: 8px; }
+    .field-sublabel { display: block; font-size: 12px; color: var(--text-light); margin-bottom: 6px; }
 
     textarea, input[type="text"], input[type="email"], input[type="date"], input[type="tel"] {
-      width: 100%;
-      padding: 16px;
-      border: 2px solid var(--gray-border);
-      border-radius: 12px;
-      font-size: 16px;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.2s;
-      box-sizing: border-box;
+      width: 100%; padding: 16px; border: 2px solid var(--gray-border); border-radius: 12px;
+      font-size: 16px; font-family: inherit; outline: none; transition: all 0.2s; box-sizing: border-box;
     }
     textarea { resize: none; }
-    textarea:focus, input:focus {
-      border-color: var(--primary) !important;
-      box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
-    }
+    textarea:focus, input:focus { border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
 
-    .hint {
-      font-size: 13px;
-      color: var(--gray-text);
-      margin-top: 8px;
-      line-height: 1.5;
-    }
+    .hint { font-size: 13px; color: var(--gray-text); margin-top: 8px; line-height: 1.5; }
 
-    /* intl-tel-input custom styles */
-    .iti { width: 100%; }
-    .iti__flag-container { border-radius: 12px 0 0 12px; }
-    .iti--separate-dial-code .iti__selected-flag {
-      background: var(--gray-bg);
-      border-radius: 12px 0 0 12px;
-      border-right: 2px solid var(--gray-border);
+    .phone-row { display: flex; gap: 8px; }
+    .phone-select {
+      width: 130px; padding: 16px 8px; border: 2px solid var(--gray-border); border-radius: 12px;
+      font-size: 14px; font-family: inherit; outline: none; background: #fff; flex-shrink: 0;
+      cursor: pointer; transition: all 0.2s;
     }
+    .phone-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
 
-    /* Date grid */
-    .date-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    /* Duration badge */
     .duration-badge {
-      display: none;
-      margin-top: 12px;
-      padding: 12px 16px;
+      display: none; margin-top: 12px; padding: 12px 16px;
       background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%);
-      border-radius: 10px;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(0,188,212,0.19);
+      border-radius: 10px; align-items: center; gap: 8px; border: 1px solid rgba(0,188,212,0.19);
     }
     .duration-badge.visible { display: flex; }
     .duration-badge span.icon { font-size: 20px; }
-    .duration-badge span.text {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--primary);
-    }
+    .duration-badge span.text { font-size: 14px; font-weight: 600; color: var(--primary); }
 
-    /* Buttons */
     .btn-primary {
-      width: 100%;
-      padding: 18px 32px;
+      width: 100%; padding: 18px 32px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(0,188,212,0.3);
-      transition: all 0.2s ease;
+      color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 600;
+      font-family: inherit; cursor: pointer; box-shadow: 0 8px 24px rgba(0,188,212,0.3); transition: all 0.2s ease;
     }
-    .btn-primary:disabled {
-      background: var(--gray-border);
-      color: var(--gray-text);
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+    .btn-primary:disabled { background: var(--gray-border); color: var(--gray-text); cursor: not-allowed; box-shadow: none; }
     .btn-primary:not(:disabled):hover { transform: translateY(-1px); }
     .btn-primary:not(:disabled):active { transform: translateY(0); }
 
     .btn-back {
-      padding: 18px 24px;
-      background: white;
-      color: var(--text-light);
-      border: 2px solid var(--gray-border);
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding: 18px 24px; background: white; color: var(--text-light); border: 2px solid var(--gray-border);
+      border-radius: 14px; font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.2s;
     }
     .btn-back:hover { transform: translateY(-1px); }
 
-    .btn-row {
-      display: flex;
-      gap: 12px;
-    }
+    .btn-row { display: flex; gap: 12px; }
     .btn-row .btn-primary { flex: 1; }
 
-    /* Counter */
-    .counter {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .counter { display: flex; align-items: center; gap: 16px; }
     .counter-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      border: 2px solid var(--gray-border);
-      background: white;
-      font-size: 20px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
+      width: 48px; height: 48px; border-radius: 12px; border: 2px solid var(--gray-border);
+      background: white; font-size: 20px; cursor: pointer; transition: all 0.2s; font-family: inherit;
     }
     .counter-btn:hover { transform: translateY(-1px); }
-    .counter-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--primary);
-      min-width: 60px;
-      text-align: center;
-    }
-    .counter-label {
-      font-size: 14px;
-      color: var(--text-light);
-    }
+    .counter-value { font-size: 32px; font-weight: 700; color: var(--primary); min-width: 60px; text-align: center; }
+    .counter-label { font-size: 14px; color: var(--text-light); }
 
-    /* Option grid */
-    .option-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
+    .option-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .option-btn {
-      padding: 14px 12px;
-      background: var(--gray-bg);
-      border: 2px solid transparent;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-      font-family: inherit;
+      padding: 14px 12px; background: var(--gray-bg); border: 2px solid transparent;
+      border-radius: 12px; cursor: pointer; transition: all 0.2s; text-align: center; font-family: inherit;
     }
-    .option-btn.selected {
-      background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%);
-      border-color: var(--primary);
-    }
+    .option-btn.selected { background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%); border-color: var(--primary); }
     .option-btn .icon { font-size: 24px; margin-bottom: 4px; }
-    .option-btn .label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-light);
-    }
+    .option-btn .label { font-size: 13px; font-weight: 500; color: var(--text-light); }
     .option-btn.selected .label { color: var(--primary); }
 
-    /* Budget options */
     .budget-btn {
-      padding: 16px 12px;
-      background: var(--gray-bg);
-      border: 2px solid transparent;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: left;
-      font-family: inherit;
+      padding: 16px 12px; background: var(--gray-bg); border: 2px solid transparent;
+      border-radius: 12px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit;
     }
-    .budget-btn.selected {
-      background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%);
-      border-color: var(--primary);
-    }
-    .budget-btn .title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--dark-text);
-      margin-bottom: 2px;
-    }
+    .budget-btn.selected { background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%); border-color: var(--primary); }
+    .budget-btn .title { font-size: 14px; font-weight: 600; color: var(--dark-text); margin-bottom: 2px; }
     .budget-btn.selected .title { color: var(--primary); }
-    .budget-btn .desc {
-      font-size: 11px;
-      color: var(--gray-text);
-    }
+    .budget-btn .desc { font-size: 11px; color: var(--gray-text); }
 
-    /* Toggle */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-    }
+    .toggle-row { display: flex; align-items: center; gap: 12px; cursor: pointer; }
     .toggle {
-      width: 52px;
-      height: 28px;
-      background: var(--gray-border);
-      border-radius: 100px;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.2s;
-      flex-shrink: 0;
+      width: 52px; height: 28px; background: var(--gray-border); border-radius: 100px;
+      position: relative; cursor: pointer; transition: all 0.2s; flex-shrink: 0;
     }
-    .toggle.on {
-      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-    }
+    .toggle.on { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); }
     .toggle-knob {
-      width: 22px;
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: 22px; height: 22px; background: white; border-radius: 50%;
+      position: absolute; top: 3px; left: 3px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .toggle.on .toggle-knob { left: 27px; }
-    .toggle-label {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--dark-text);
-    }
+    .toggle-label { font-size: 14px; font-weight: 500; color: var(--dark-text); }
 
-    /* Interesses grid */
-    .interesses-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 32px;
-    }
+    .interesses-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
     .interesse-btn {
-      padding: 20px 16px;
-      background: white;
-      border: 2px solid var(--gray);
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: inherit;
+      padding: 20px 16px; background: white; border: 2px solid var(--gray); border-radius: 16px;
+      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-family: inherit;
     }
-    .interesse-btn.selected {
-      background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%);
-      border-color: var(--primary);
-    }
+    .interesse-btn.selected { background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%); border-color: var(--primary); }
     .interesse-btn .icon-box {
-      width: 48px;
-      height: 48px;
-      background: var(--gray);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
+      width: 48px; height: 48px; background: var(--gray); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
     }
-    .interesse-btn.selected .icon-box {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    }
-    .interesse-btn .nome {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--dark-text);
-    }
+    .interesse-btn.selected .icon-box { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+    .interesse-btn .nome { font-size: 15px; font-weight: 600; color: var(--dark-text); }
     .interesse-btn.selected .nome { color: var(--primary); }
 
-    /* Primeira vez card */
-    .primeira-vez-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .primeira-vez-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-    .primeira-vez-row span {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--dark-text);
-    }
+    .primeira-vez-card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .primeira-vez-row { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .primeira-vez-row span { font-size: 15px; font-weight: 500; color: var(--dark-text); }
 
-    /* Email warning */
     .email-warning {
-      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(245,158,11,0.25);
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 16px;
+      padding: 16px 20px; margin-bottom: 24px; border: 1px solid rgba(245,158,11,0.25);
+      display: flex; align-items: flex-start; gap: 12px;
     }
     .email-warning .icon { font-size: 24px; }
-    .email-warning .title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #92400E;
-      margin-bottom: 4px;
-    }
-    .email-warning .text {
-      font-size: 13px;
-      color: #A16207;
-      line-height: 1.5;
-      margin: 0;
-    }
+    .email-warning .title { font-size: 14px; font-weight: 600; color: #92400E; margin-bottom: 4px; }
+    .email-warning .text { font-size: 13px; color: #A16207; line-height: 1.5; margin: 0; }
 
-    /* Resumo */
     .resumo {
-      background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(0,188,212,0.25);
+      background: linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%); border-radius: 16px;
+      padding: 20px; margin-bottom: 24px; border: 1px solid rgba(0,188,212,0.25);
     }
-    .resumo-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .resumo-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .resumo-tag {
-      background: white;
-      padding: 6px 12px;
-      border-radius: 100px;
-      font-size: 13px;
-      color: var(--dark-text);
-    }
+    .resumo-title { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .resumo-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .resumo-tag { background: white; padding: 6px 12px; border-radius: 100px; font-size: 13px; color: var(--dark-text); }
 
-    /* Spinner */
     .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 8px;
+      width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+      border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;
     }
 
-    /* Success screen */
     .success-screen { display: none; animation: fadeIn 0.5s ease; }
     .success-screen.visible { display: block; }
-
     .success-header {
-      text-align: center;
-      margin-bottom: 32px;
-      padding: 32px 24px;
+      text-align: center; margin-bottom: 32px; padding: 32px 24px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      border-radius: 24px;
-      color: white;
-      box-shadow: 0 12px 40px rgba(0,188,212,0.3);
+      border-radius: 24px; color: white; box-shadow: 0 12px 40px rgba(0,188,212,0.3);
     }
     .success-header .emoji { font-size: 48px; margin-bottom: 12px; }
-    .success-header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .success-header .destino {
-      font-size: 16px;
-      opacity: 0.9;
-      margin-bottom: 8px;
-    }
-    .success-header .datas {
-      font-size: 14px;
-      opacity: 0.8;
-    }
-    .success-header .email-info {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 12px;
-      font-size: 14px;
-    }
+    .success-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .success-header .destino { font-size: 16px; opacity: 0.9; margin-bottom: 8px; }
+    .success-header .datas { font-size: 14px; opacity: 0.8; }
+    .success-header .email-info { margin-top: 20px; padding: 12px 20px; background: rgba(255,255,255,0.2); border-radius: 12px; font-size: 14px; }
 
-    .btn-restart {
-      width: 100%;
-      margin-top: 16px;
-      padding: 14px;
-      background: transparent;
-      color: var(--text-light);
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
-      font-family: inherit;
-    }
+    .btn-restart { width: 100%; margin-top: 16px; padding: 14px; background: transparent; color: var(--text-light); border: none; font-size: 14px; cursor: pointer; font-family: inherit; }
     .btn-restart:hover { color: var(--primary); }
 
-    /* Error message */
-    .error-msg {
-      display: none;
-      background: #FEE2E2;
-      color: #991B1B;
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      margin-bottom: 16px;
-      border: 1px solid #FECACA;
-    }
+    .error-msg { display: none; background: #FEE2E2; color: #991B1B; padding: 12px 16px; border-radius: 12px; font-size: 14px; margin-bottom: 16px; border: 1px solid #FECACA; }
     .error-msg.visible { display: block; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Responsive */
     @media (max-width: 600px) {
       .step-title h1 { font-size: 24px; }
       .option-grid { grid-template-columns: repeat(2, 1fr); }
       .interesses-grid { grid-template-columns: 1fr; }
       .date-grid { grid-template-columns: 1fr; }
       .success-header h1 { font-size: 22px; }
+      .phone-select { width: 110px; padding: 16px 4px; font-size: 13px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ==================== HEADER ==================== -->
   <header class="header">
     <div class="logo-area">
       <div class="logo-icon">✈️</div>
-      <div class="logo-text">
-        <span class="magenta">GRUPO</span><span class="cyan">DICAS</span>
-      </div>
+      <div class="logo-text"><span class="magenta">GRUPO</span><span class="cyan">DICAS</span></div>
     </div>
     <div class="step-indicator" id="stepIndicator">
       <div class="step-dot active" id="dot1"></div>
@@ -621,57 +274,42 @@
     </div>
   </header>
 
-  <!-- ==================== MAIN ==================== -->
   <main>
 
-    <!-- ========== STEP 1: Destino e Datas ========== -->
+    <!-- STEP 1 -->
     <div class="step visible" id="step1">
       <div class="step-title">
         <h1>Crie o seu roteiro personalizado!</h1>
         <p>Descreva seu destino e criamos um roteiro perfeito para você</p>
       </div>
-
       <div class="card">
         <div class="field">
           <label class="field-label">Destino da viagem ✈️</label>
           <textarea id="destino" rows="3" placeholder="Ex: Uns 5 dias em Roma, 3 em Florença e 2 em Veneza"></textarea>
           <p class="hint">💡 <strong>Dica:</strong> Detalhe o máximo possível! Inclua as cidades, países e se já souber, a quantidade de dias em cada lugar. Quanto mais detalhes, melhor será seu roteiro personalizado.</p>
         </div>
-
         <div class="field">
           <label class="field-label">Datas da viagem 📅</label>
           <div class="date-grid">
-            <div>
-              <label class="field-sublabel">Chegada</label>
-              <input type="date" id="dataChegada">
-            </div>
-            <div>
-              <label class="field-sublabel">Partida</label>
-              <input type="date" id="dataPartida">
-            </div>
+            <div><label class="field-sublabel">Chegada</label><input type="date" id="dataChegada"></div>
+            <div><label class="field-sublabel">Partida</label><input type="date" id="dataPartida"></div>
           </div>
-
           <div class="duration-badge" id="durationBadge">
-            <span class="icon">🗓️</span>
-            <span class="text" id="durationText">Duração total: 0 dias</span>
+            <span class="icon">🗓️</span><span class="text" id="durationText">Duração total: 0 dias</span>
           </div>
-
           <p class="hint">📌 Saber as datas exatas nos ajuda a considerar o clima, eventos especiais e melhores experiências para a época.</p>
         </div>
       </div>
-
       <button class="btn-primary" id="btnStep1" disabled onclick="goToStep(2)">Continuar →</button>
     </div>
 
-    <!-- ========== STEP 2: Detalhes da viagem ========== -->
+    <!-- STEP 2 -->
     <div class="step" id="step2">
       <div class="step-title">
         <h1>Detalhes da viagem 👥</h1>
         <p>Conte-nos mais sobre quem vai viajar</p>
       </div>
-
       <div class="card">
-        <!-- Quantas pessoas -->
         <div class="field">
           <label class="field-label">Quantas pessoas? 👤</label>
           <div class="counter">
@@ -681,135 +319,71 @@
             <span class="counter-label" id="pessoasLabel">pessoas</span>
           </div>
         </div>
-
-        <!-- Quem vai viajar -->
         <div class="field">
           <label class="field-label">Quem vai viajar? 🧳</label>
           <div class="option-grid" id="viajantesGrid">
-            <button class="option-btn" data-value="solo" onclick="selectViajante(this)">
-              <div class="icon">🧑</div>
-              <div class="label">Sozinho(a)</div>
-            </button>
-            <button class="option-btn selected" data-value="casal" onclick="selectViajante(this)">
-              <div class="icon">💑</div>
-              <div class="label">Casal</div>
-            </button>
-            <button class="option-btn" data-value="familia" onclick="selectViajante(this)">
-              <div class="icon">👨‍👩‍👧‍👦</div>
-              <div class="label">Família</div>
-            </button>
-            <button class="option-btn" data-value="amigos" onclick="selectViajante(this)">
-              <div class="icon">👯</div>
-              <div class="label">Amigos</div>
-            </button>
-            <button class="option-btn" data-value="terceira-idade" onclick="selectViajante(this)">
-              <div class="icon">👴👵</div>
-              <div class="label">Terceira Idade</div>
-            </button>
+            <button class="option-btn" data-value="solo" onclick="selectViajante(this)"><div class="icon">🧑</div><div class="label">Sozinho(a)</div></button>
+            <button class="option-btn selected" data-value="casal" onclick="selectViajante(this)"><div class="icon">💑</div><div class="label">Casal</div></button>
+            <button class="option-btn" data-value="familia" onclick="selectViajante(this)"><div class="icon">👨‍👩‍👧‍👦</div><div class="label">Família</div></button>
+            <button class="option-btn" data-value="amigos" onclick="selectViajante(this)"><div class="icon">👯</div><div class="label">Amigos</div></button>
+            <button class="option-btn" data-value="terceira-idade" onclick="selectViajante(this)"><div class="icon">👴👵</div><div class="label">Terceira Idade</div></button>
           </div>
         </div>
-
-        <!-- Crianças -->
         <div class="field">
           <div class="toggle-row" onclick="toggleCriancas()">
-            <div class="toggle" id="toggleCriancas">
-              <div class="toggle-knob"></div>
-            </div>
+            <div class="toggle" id="toggleCriancas"><div class="toggle-knob"></div></div>
             <span class="toggle-label">Viagem com crianças? 👶</span>
           </div>
         </div>
-
-        <!-- Orçamento -->
         <div class="field">
           <label class="field-label">Qual seu orçamento? 💰</label>
           <div class="option-grid" id="orcamentoGrid">
-            <button class="budget-btn" data-value="economico" onclick="selectOrcamento(this)">
-              <div class="title">Econômico</div>
-              <div class="desc">Melhor custo-benefício</div>
-            </button>
-            <button class="budget-btn selected" data-value="moderado" onclick="selectOrcamento(this)">
-              <div class="title">Moderado</div>
-              <div class="desc">Conforto e economia</div>
-            </button>
-            <button class="budget-btn" data-value="luxo" onclick="selectOrcamento(this)">
-              <div class="title">Luxo</div>
-              <div class="desc">Experiências premium</div>
-            </button>
+            <button class="budget-btn" data-value="economico" onclick="selectOrcamento(this)"><div class="title">Econômico</div><div class="desc">Melhor custo-benefício</div></button>
+            <button class="budget-btn selected" data-value="moderado" onclick="selectOrcamento(this)"><div class="title">Moderado</div><div class="desc">Conforto e economia</div></button>
+            <button class="budget-btn" data-value="luxo" onclick="selectOrcamento(this)"><div class="title">Luxo</div><div class="desc">Experiências premium</div></button>
           </div>
         </div>
       </div>
-
       <div class="btn-row">
         <button class="btn-back" onclick="goToStep(1)">← Voltar</button>
         <button class="btn-primary" onclick="goToStep(3)">Continuar →</button>
       </div>
     </div>
 
-    <!-- ========== STEP 3: Interesses ========== -->
+    <!-- STEP 3 -->
     <div class="step" id="step3">
       <div class="step-title">
         <h1>O que você curte? 🎯</h1>
         <p>Selecione seus interesses (pode marcar vários)</p>
       </div>
-
       <div class="interesses-grid" id="interessesGrid">
-        <button class="interesse-btn" data-value="cultura" onclick="toggleInteresse(this)">
-          <div class="icon-box">🎨</div>
-          <span class="nome">Cultura & Museus</span>
-        </button>
-        <button class="interesse-btn" data-value="gastronomia" onclick="toggleInteresse(this)">
-          <div class="icon-box">🍽️</div>
-          <span class="nome">Gastronomia</span>
-        </button>
-        <button class="interesse-btn" data-value="compras" onclick="toggleInteresse(this)">
-          <div class="icon-box">🛍️</div>
-          <span class="nome">Compras</span>
-        </button>
-        <button class="interesse-btn" data-value="aventura" onclick="toggleInteresse(this)">
-          <div class="icon-box">🏃</div>
-          <span class="nome">Aventura</span>
-        </button>
-        <button class="interesse-btn" data-value="romantico" onclick="toggleInteresse(this)">
-          <div class="icon-box">💕</div>
-          <span class="nome">Passeios Românticos</span>
-        </button>
-        <button class="interesse-btn" data-value="noturno" onclick="toggleInteresse(this)">
-          <div class="icon-box">🌙</div>
-          <span class="nome">Vida Noturna</span>
-        </button>
-        <button class="interesse-btn" data-value="natureza" onclick="toggleInteresse(this)">
-          <div class="icon-box">🌿</div>
-          <span class="nome">Natureza</span>
-        </button>
-        <button class="interesse-btn" data-value="fotografia" onclick="toggleInteresse(this)">
-          <div class="icon-box">📸</div>
-          <span class="nome">Pontos Instagramáveis</span>
-        </button>
+        <button class="interesse-btn" data-value="cultura" onclick="toggleInteresse(this)"><div class="icon-box">🎨</div><span class="nome">Cultura & Museus</span></button>
+        <button class="interesse-btn" data-value="gastronomia" onclick="toggleInteresse(this)"><div class="icon-box">🍽️</div><span class="nome">Gastronomia</span></button>
+        <button class="interesse-btn" data-value="compras" onclick="toggleInteresse(this)"><div class="icon-box">🛍️</div><span class="nome">Compras</span></button>
+        <button class="interesse-btn" data-value="aventura" onclick="toggleInteresse(this)"><div class="icon-box">🏃</div><span class="nome">Aventura</span></button>
+        <button class="interesse-btn" data-value="romantico" onclick="toggleInteresse(this)"><div class="icon-box">💕</div><span class="nome">Passeios Românticos</span></button>
+        <button class="interesse-btn" data-value="noturno" onclick="toggleInteresse(this)"><div class="icon-box">🌙</div><span class="nome">Vida Noturna</span></button>
+        <button class="interesse-btn" data-value="natureza" onclick="toggleInteresse(this)"><div class="icon-box">🌿</div><span class="nome">Natureza</span></button>
+        <button class="interesse-btn" data-value="fotografia" onclick="toggleInteresse(this)"><div class="icon-box">📸</div><span class="nome">Pontos Instagramáveis</span></button>
       </div>
-
-      <!-- Primeira vez -->
       <div class="primeira-vez-card">
         <div class="primeira-vez-row" onclick="togglePrimeiraVez()">
           <span>É sua primeira vez nesse destino? 🆕</span>
-          <div class="toggle on" id="togglePrimeiraVez">
-            <div class="toggle-knob"></div>
-          </div>
+          <div class="toggle on" id="togglePrimeiraVez"><div class="toggle-knob"></div></div>
         </div>
       </div>
-
       <div class="btn-row">
         <button class="btn-back" onclick="goToStep(2)">← Voltar</button>
         <button class="btn-primary" id="btnStep3" disabled onclick="goToStep(4)">Continuar →</button>
       </div>
     </div>
 
-    <!-- ========== STEP 4: Email ========== -->
+    <!-- STEP 4 -->
     <div class="step" id="step4">
       <div class="step-title">
         <h1>Quase lá! 🎉</h1>
         <p>Onde enviamos seu roteiro personalizado?</p>
       </div>
-
       <div class="email-warning">
         <span class="icon">📧</span>
         <div>
@@ -817,7 +391,6 @@
           <p class="text">Enviaremos seu roteiro completo por e-mail, para que você o tenha guardado e possa compartilhar com quem quiser. Certifique-se de digitar o e-mail corretamente!</p>
         </div>
       </div>
-
       <div class="card">
         <div class="field">
           <label class="field-label">Seu nome</label>
@@ -829,26 +402,45 @@
         </div>
         <div class="field">
           <label class="field-label">Seu celular (WhatsApp) 📱</label>
-          <input type="tel" id="celular" placeholder="">
+          <div class="phone-row">
+            <select id="paisCode" class="phone-select">
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+81">🇯🇵 +81</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+41">🇨🇭 +41</option>
+              <option value="+31">🇳🇱 +31</option>
+              <option value="+353">🇮🇪 +353</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+56">🇨🇱 +56</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+598">🇺🇾 +598</option>
+            </select>
+            <input type="tel" id="celular" placeholder="(11) 99999-9999" style="flex:1;">
+          </div>
           <p class="hint">📲 Enviaremos um aviso por SMS quando seu roteiro ficar pronto, pois muitas vezes vai para o spam.</p>
         </div>
       </div>
-
-      <!-- Resumo -->
       <div class="resumo" id="resumo">
         <div class="resumo-title">Resumo do seu roteiro</div>
         <div class="resumo-tags" id="resumoTags"></div>
       </div>
-
       <div id="errorMsg" class="error-msg"></div>
-
       <div class="btn-row">
         <button class="btn-back" onclick="goToStep(3)">← Voltar</button>
         <button class="btn-primary" id="btnGenerate" disabled onclick="handleSubmit()">✨ Gerar Meu Roteiro</button>
       </div>
     </div>
 
-    <!-- ========== TELA DE SUCESSO ========== -->
+    <!-- SUCESSO -->
     <div class="success-screen" id="successScreen">
       <div class="success-header">
         <div class="emoji">🎉</div>
@@ -857,7 +449,6 @@
         <p class="datas" id="successDatas"></p>
         <div class="email-info" id="successEmail"></div>
       </div>
-
       <div class="card" style="text-align:center; padding:32px;">
         <div style="font-size:48px; margin-bottom:16px;">⏳</div>
         <h2 style="font-size:20px; font-weight:700; color:var(--text); margin-bottom:8px;">Fique de olho no seu e-mail!</h2>
@@ -866,101 +457,46 @@
           Confira sua caixa de entrada e também a pasta de SPAM, por via das dúvidas!
         </p>
       </div>
-
       <button class="btn-restart" onclick="resetForm()">← Criar outro roteiro</button>
     </div>
 
   </main>
 
-  <!-- ==================== JAVASCRIPT ==================== -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/js/intlTelInput.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/js/utils.js"></script>
   <script>
-    // =====================================================
-    // CONFIGURAÇÃO
-    // =====================================================
     const WEBHOOK_URL = 'https://grupo-dicas-servidor-production.up.railway.app/gerar';
 
-    // ==================== STATE ====================
     const state = {
-      step: 1,
-      destino: '',
-      dataChegada: '',
-      dataPartida: '',
-      duracaoDias: 0,
-      quantasPessoas: 2,
-      viajantes: 'casal',
-      criancas: false,
-      orcamento: 'moderado',
-      interesses: [],
-      primeiraVez: true,
-      nome: '',
-      email: '',
-      celular: '',
-      isGenerating: false
+      step: 1, destino: '', dataChegada: '', dataPartida: '', duracaoDias: 0,
+      quantasPessoas: 2, viajantes: 'casal', criancas: false, orcamento: 'moderado',
+      interesses: [], primeiraVez: true, nome: '', email: '', celular: '', isGenerating: false
     };
 
-    // ==================== INTL TEL INPUT ====================
-    var iti = window.intlTelInput(document.getElementById('celular'), {
-      initialCountry: 'br',
-      preferredCountries: ['br', 'us', 'pt', 'es', 'fr', 'it', 'gb', 'de'],
-      separateDialCode: true,
-      utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.21/js/utils.js'
-    });
-
-    // ==================== NAVIGATION ====================
     function goToStep(n) {
       if (n === 2 && !isStep1Valid()) return;
       if (n === 4 && state.interesses.length === 0) return;
-
-      // Hide all steps
       document.querySelectorAll('.step').forEach(s => s.classList.remove('visible'));
       document.getElementById('step' + n).classList.add('visible');
       state.step = n;
       window.parent.postMessage({ type: 'grupodicas_form', event: 'form_step_' + n }, '*');
       updateDots();
-
       if (n === 4) buildResumo();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function updateDots() {
       for (let i = 1; i <= 4; i++) {
-        const dot = document.getElementById('dot' + i);
-        if (i <= state.step) {
-          dot.className = 'step-dot active';
-        } else {
-          dot.className = 'step-dot inactive';
-        }
+        document.getElementById('dot' + i).className = i <= state.step ? 'step-dot active' : 'step-dot inactive';
       }
     }
 
-    // ==================== STEP 1 ====================
-    function isStep1Valid() {
-      return state.destino.trim() !== '' && state.dataChegada && state.dataPartida && state.duracaoDias > 0;
-    }
+    function isStep1Valid() { return state.destino.trim() !== '' && state.dataChegada && state.dataPartida && state.duracaoDias > 0; }
+    function updateStep1Btn() { document.getElementById('btnStep1').disabled = !isStep1Valid(); }
 
-    function updateStep1Btn() {
-      document.getElementById('btnStep1').disabled = !isStep1Valid();
-    }
-
-    document.getElementById('destino').addEventListener('input', function() {
-      state.destino = this.value;
-      updateStep1Btn();
-    });
-
+    document.getElementById('destino').addEventListener('input', function() { state.destino = this.value; updateStep1Btn(); });
     document.getElementById('dataChegada').addEventListener('change', function() {
-      state.dataChegada = this.value;
-      document.getElementById('dataPartida').min = this.value;
-      calcDuration();
-      updateStep1Btn();
+      state.dataChegada = this.value; document.getElementById('dataPartida').min = this.value; calcDuration(); updateStep1Btn();
     });
-
-    document.getElementById('dataPartida').addEventListener('change', function() {
-      state.dataPartida = this.value;
-      calcDuration();
-      updateStep1Btn();
-    });
+    document.getElementById('dataPartida').addEventListener('change', function() { state.dataPartida = this.value; calcDuration(); updateStep1Btn(); });
 
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('dataChegada').min = today;
@@ -968,79 +504,43 @@
 
     function calcDuration() {
       if (state.dataChegada && state.dataPartida) {
-        const c = new Date(state.dataChegada);
-        const p = new Date(state.dataPartida);
-        const diff = Math.ceil((p - c) / (1000 * 60 * 60 * 24));
+        const diff = Math.ceil((new Date(state.dataPartida) - new Date(state.dataChegada)) / (1000*60*60*24));
         if (diff > 0) {
           state.duracaoDias = diff;
-          const badge = document.getElementById('durationBadge');
-          badge.classList.add('visible');
-          document.getElementById('durationText').textContent = 
-            'Duração total: ' + diff + (diff === 1 ? ' dia' : ' dias');
-        } else {
-          state.duracaoDias = 0;
-          document.getElementById('durationBadge').classList.remove('visible');
-        }
+          document.getElementById('durationBadge').classList.add('visible');
+          document.getElementById('durationText').textContent = 'Duração total: ' + diff + (diff === 1 ? ' dia' : ' dias');
+        } else { state.duracaoDias = 0; document.getElementById('durationBadge').classList.remove('visible'); }
       }
     }
 
-    // ==================== STEP 2 ====================
     function changePessoas(delta) {
       state.quantasPessoas = Math.max(1, Math.min(20, state.quantasPessoas + delta));
       document.getElementById('pessoasValue').textContent = state.quantasPessoas;
       document.getElementById('pessoasLabel').textContent = state.quantasPessoas === 1 ? 'pessoa' : 'pessoas';
     }
-
     function selectViajante(btn) {
       document.querySelectorAll('#viajantesGrid .option-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      state.viajantes = btn.dataset.value;
+      btn.classList.add('selected'); state.viajantes = btn.dataset.value;
     }
-
-    function toggleCriancas() {
-      state.criancas = !state.criancas;
-      document.getElementById('toggleCriancas').classList.toggle('on', state.criancas);
-    }
-
+    function toggleCriancas() { state.criancas = !state.criancas; document.getElementById('toggleCriancas').classList.toggle('on', state.criancas); }
     function selectOrcamento(btn) {
       document.querySelectorAll('#orcamentoGrid .budget-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      state.orcamento = btn.dataset.value;
+      btn.classList.add('selected'); state.orcamento = btn.dataset.value;
     }
-
-    // ==================== STEP 3 ====================
     function toggleInteresse(btn) {
-      const val = btn.dataset.value;
-      const idx = state.interesses.indexOf(val);
-      if (idx > -1) {
-        state.interesses.splice(idx, 1);
-        btn.classList.remove('selected');
-      } else {
-        state.interesses.push(val);
-        btn.classList.add('selected');
-      }
+      const val = btn.dataset.value, idx = state.interesses.indexOf(val);
+      if (idx > -1) { state.interesses.splice(idx, 1); btn.classList.remove('selected'); }
+      else { state.interesses.push(val); btn.classList.add('selected'); }
       document.getElementById('btnStep3').disabled = state.interesses.length === 0;
     }
+    function togglePrimeiraVez() { state.primeiraVez = !state.primeiraVez; document.getElementById('togglePrimeiraVez').classList.toggle('on', state.primeiraVez); }
 
-    function togglePrimeiraVez() {
-      state.primeiraVez = !state.primeiraVez;
-      document.getElementById('togglePrimeiraVez').classList.toggle('on', state.primeiraVez);
-    }
-
-    // ==================== STEP 4 ====================
-    document.getElementById('nome').addEventListener('input', function() {
-      state.nome = this.value;
-      updateStep4Btn();
-    });
-
-    document.getElementById('email').addEventListener('input', function() {
-      state.email = this.value;
-      updateStep4Btn();
-    });
-
+    document.getElementById('nome').addEventListener('input', function() { state.nome = this.value; updateStep4Btn(); });
+    document.getElementById('email').addEventListener('input', function() { state.email = this.value; updateStep4Btn(); });
     document.getElementById('celular').addEventListener('input', function() {
-      // Pega o numero completo com codigo do pais usando intl-tel-input
-      state.celular = iti.getNumber();
+      var code = document.getElementById('paisCode').value;
+      var num = this.value.replace(/\D/g, '');
+      state.celular = num ? code + num : '';
     });
 
     function updateStep4Btn() {
@@ -1050,8 +550,7 @@
 
     function formatDate(dateStr) {
       if (!dateStr) return '';
-      const date = new Date(dateStr + 'T00:00:00');
-      return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+      return new Date(dateStr + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
     }
 
     function buildResumo() {
@@ -1061,13 +560,10 @@
       html += '<span class="resumo-tag">🗓️ ' + state.duracaoDias + (state.duracaoDias === 1 ? ' dia' : ' dias') + '</span>';
       html += '<span class="resumo-tag">👥 ' + state.quantasPessoas + (state.quantasPessoas === 1 ? ' pessoa' : ' pessoas') + '</span>';
       html += '<span class="resumo-tag">💰 ' + state.orcamento + '</span>';
-      if (state.dataChegada) {
-        html += '<span class="resumo-tag">📅 ' + formatDate(state.dataChegada) + ' → ' + formatDate(state.dataPartida) + '</span>';
-      }
+      if (state.dataChegada) html += '<span class="resumo-tag">📅 ' + formatDate(state.dataChegada) + ' → ' + formatDate(state.dataPartida) + '</span>';
       tags.innerHTML = html;
     }
 
-    // ==================== SUBMIT ====================
     async function handleSubmit() {
       if (state.isGenerating) return;
       state.isGenerating = true;
@@ -1076,106 +572,50 @@
       const btn = document.getElementById('btnGenerate');
       btn.innerHTML = '<span class="spinner"></span> Enviando...';
       btn.disabled = true;
+      document.getElementById('errorMsg').classList.remove('visible');
 
-      const errorEl = document.getElementById('errorMsg');
-      errorEl.classList.remove('visible');
-
-      const interessesMap = {
-        cultura: 'Cultura & Museus',
-        gastronomia: 'Gastronomia',
-        compras: 'Compras',
-        aventura: 'Aventura',
-        romantico: 'Passeios Românticos',
-        noturno: 'Vida Noturna',
-        natureza: 'Natureza',
-        fotografia: 'Pontos Instagramáveis'
+      const maps = {
+        interesses: { cultura:'Cultura & Museus', gastronomia:'Gastronomia', compras:'Compras', aventura:'Aventura', romantico:'Passeios Românticos', noturno:'Vida Noturna', natureza:'Natureza', fotografia:'Pontos Instagramáveis' },
+        viajantes: { solo:'Sozinho(a)', casal:'Casal', familia:'Família', amigos:'Amigos', 'terceira-idade':'Terceira Idade' },
+        orcamento: { economico:'Econômico', moderado:'Moderado', luxo:'Luxo' }
       };
 
-      const viajantesMap = {
-        solo: 'Sozinho(a)',
-        casal: 'Casal',
-        familia: 'Família',
-        amigos: 'Amigos',
-        'terceira-idade': 'Terceira Idade'
-      };
-
-      const orcamentoMap = {
-        economico: 'Econômico',
-        moderado: 'Moderado',
-        luxo: 'Luxo'
-      };
-
-      // Pegar numero completo com codigo do pais
-      var celularCompleto = iti.getNumber();
+      var code = document.getElementById('paisCode').value;
+      var numLimpo = document.getElementById('celular').value.replace(/\D/g, '');
+      var celularCompleto = numLimpo ? code + numLimpo : '';
 
       const payload = {
-        nome: state.nome,
-        email: state.email,
-        destino: state.destino,
-        dataChegada: state.dataChegada,
-        dataPartida: state.dataPartida,
-        duracaoDias: state.duracaoDias,
-        quantasPessoas: state.quantasPessoas,
-        viajantes: viajantesMap[state.viajantes] || state.viajantes,
+        nome: state.nome, email: state.email, destino: state.destino,
+        dataChegada: state.dataChegada, dataPartida: state.dataPartida,
+        duracaoDias: state.duracaoDias, quantasPessoas: state.quantasPessoas,
+        viajantes: maps.viajantes[state.viajantes] || state.viajantes,
         criancas: state.criancas,
-        orcamento: orcamentoMap[state.orcamento] || state.orcamento,
-        interesses: state.interesses.map(i => interessesMap[i] || i).join(', '),
+        orcamento: maps.orcamento[state.orcamento] || state.orcamento,
+        interesses: state.interesses.map(i => maps.interesses[i] || i).join(', '),
         primeiraVez: state.primeiraVez,
         celular: celularCompleto
       };
 
-      fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      setTimeout(function() {
-        showSuccess();
-      }, 1500);
+      fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      setTimeout(function() { showSuccess(); }, 1500);
     }
 
     function showSuccess() {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('visible'));
       document.getElementById('stepIndicator').style.display = 'none';
-
       const firstName = state.nome.split(' ')[0];
       document.getElementById('successTitle').textContent = 'Seu roteiro está sendo criado, ' + firstName + '!';
       document.getElementById('successDestino').textContent = state.destino;
-      document.getElementById('successDatas').textContent = 
-        formatDate(state.dataChegada) + ' → ' + formatDate(state.dataPartida) + ' • ' + state.duracaoDias + ' dias';
-      document.getElementById('successEmail').innerHTML = 
-        '📧 Enviaremos para <strong>' + state.email + '</strong>';
-
+      document.getElementById('successDatas').textContent = formatDate(state.dataChegada) + ' → ' + formatDate(state.dataPartida) + ' • ' + state.duracaoDias + ' dias';
+      document.getElementById('successEmail').innerHTML = '📧 Enviaremos para <strong>' + state.email + '</strong>';
       document.getElementById('successScreen').classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       window.parent.postMessage({ type: 'grupodicas_form', event: 'form_success' }, '*');
     }
 
-    // ==================== RESET ====================
     function resetForm() {
-      state.destino = '';
-      state.dataChegada = '';
-      state.dataPartida = '';
-      state.duracaoDias = 0;
-      state.quantasPessoas = 2;
-      state.viajantes = 'casal';
-      state.criancas = false;
-      state.orcamento = 'moderado';
-      state.interesses = [];
-      state.primeiraVez = true;
-      state.nome = '';
-      state.email = '';
-      state.celular = '';
-      state.isGenerating = false;
-      state.step = 1;
-
-      document.getElementById('destino').value = '';
-      document.getElementById('dataChegada').value = '';
-      document.getElementById('dataPartida').value = '';
-      document.getElementById('nome').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('celular').value = '';
+      Object.assign(state, { destino:'', dataChegada:'', dataPartida:'', duracaoDias:0, quantasPessoas:2, viajantes:'casal', criancas:false, orcamento:'moderado', interesses:[], primeiraVez:true, nome:'', email:'', celular:'', isGenerating:false, step:1 });
+      ['destino','dataChegada','dataPartida','nome','email','celular'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('pessoasValue').textContent = '2';
       document.getElementById('pessoasLabel').textContent = 'pessoas';
       document.getElementById('durationBadge').classList.remove('visible');
@@ -1183,18 +623,14 @@
       document.getElementById('btnStep3').disabled = true;
       document.getElementById('btnGenerate').disabled = true;
       document.getElementById('btnGenerate').innerHTML = '✨ Gerar Meu Roteiro';
-
+      document.getElementById('paisCode').value = '+55';
       document.querySelectorAll('#viajantesGrid .option-btn').forEach(b => b.classList.remove('selected'));
       document.querySelector('#viajantesGrid [data-value="casal"]').classList.add('selected');
-
       document.querySelectorAll('#orcamentoGrid .budget-btn').forEach(b => b.classList.remove('selected'));
       document.querySelector('#orcamentoGrid [data-value="moderado"]').classList.add('selected');
-
       document.querySelectorAll('.interesse-btn').forEach(b => b.classList.remove('selected'));
-
       document.getElementById('toggleCriancas').classList.remove('on');
       document.getElementById('togglePrimeiraVez').classList.add('on');
-
       document.getElementById('successScreen').classList.remove('visible');
       document.getElementById('stepIndicator').style.display = 'flex';
       document.getElementById('step1').classList.add('visible');
@@ -1203,9 +639,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Disparar evento de visualização do step 1 ao carregar
     window.parent.postMessage({ type: 'grupodicas_form', event: 'form_step_1' }, '*');
   </script>
-
 </body>
 </html>
