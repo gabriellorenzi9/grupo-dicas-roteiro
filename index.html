@@ -489,7 +489,7 @@
       }
     }
 
-    function isStep1Valid() { return state.destino.trim() !== '' && state.dataChegada && state.dataPartida && state.duracaoDias > 0; }
+    function isStep1Valid() { return state.destino.trim() !== '' && state.dataChegada && state.dataPartida && state.duracaoDias > 0 && state.duracaoDias <= 20; }
     function updateStep1Btn() { document.getElementById('btnStep1').disabled = !isStep1Valid(); }
 
     document.getElementById('destino').addEventListener('input', function() { state.destino = this.value; updateStep1Btn(); });
@@ -505,12 +505,22 @@
     function calcDuration() {
       if (state.dataChegada && state.dataPartida) {
         const diff = Math.ceil((new Date(state.dataPartida) - new Date(state.dataChegada)) / (1000*60*60*24));
-        if (diff > 0) {
+        if (diff > 0 && diff <= 20) {
           state.duracaoDias = diff;
           document.getElementById('durationBadge').classList.add('visible');
           document.getElementById('durationText').textContent = 'Duração total: ' + diff + (diff === 1 ? ' dia' : ' dias');
+          document.getElementById('durationBadge').style.background = 'linear-gradient(135deg, var(--primary-light) 0%, #E0F7FA 100%)';
+          document.getElementById('durationBadge').style.borderColor = 'rgba(0,188,212,0.19)';
+        } else if (diff > 20) {
+          state.duracaoDias = diff;
+          document.getElementById('durationBadge').classList.add('visible');
+          document.getElementById('durationText').textContent = '⚠️ Máximo de 20 dias. Selecione datas mais próximas.';
+          document.getElementById('durationBadge').style.background = 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)';
+          document.getElementById('durationBadge').style.borderColor = 'rgba(245,158,11,0.3)';
+          state.duracaoDias = diff; // mantém o valor mas isStep1Valid() vai bloquear
         } else { state.duracaoDias = 0; document.getElementById('durationBadge').classList.remove('visible'); }
       }
+      updateStep1Btn();
     }
 
     function changePessoas(delta) {
