@@ -271,6 +271,7 @@
       <div class="step-dot inactive" id="dot2"></div>
       <div class="step-dot inactive" id="dot3"></div>
       <div class="step-dot inactive" id="dot4"></div>
+      <div class="step-dot inactive" id="dot5"></div>
     </div>
   </header>
 
@@ -378,8 +379,68 @@
       </div>
     </div>
 
-    <!-- STEP 4 -->
+    <!-- STEP 4 - Já reservou? -->
     <div class="step" id="step4">
+      <div class="step-title">
+        <h1>Já reservou algo? ✅</h1>
+        <p>Marque o que já tem reservado para sua viagem</p>
+      </div>
+      <div class="card">
+        <div class="field" style="margin-bottom:16px;">
+          <div class="toggle-row" onclick="toggleJaTem('hotel')" style="padding:16px 0;border-bottom:1px solid var(--gray-border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:44px;height:44px;background:var(--gray);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🏨</div>
+              <span class="toggle-label">Hotel / Hospedagem</span>
+            </div>
+            <div class="toggle" id="toggleHotel"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:16px;">
+          <div class="toggle-row" onclick="toggleJaTem('ingressos')" style="padding:16px 0;border-bottom:1px solid var(--gray-border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:44px;height:44px;background:var(--gray);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🎟️</div>
+              <span class="toggle-label">Ingressos e passeios</span>
+            </div>
+            <div class="toggle" id="toggleIngressos"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:16px;">
+          <div class="toggle-row" onclick="toggleJaTem('seguro')" style="padding:16px 0;border-bottom:1px solid var(--gray-border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:44px;height:44px;background:var(--gray);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🛡️</div>
+              <span class="toggle-label">Seguro viagem</span>
+            </div>
+            <div class="toggle" id="toggleSeguro"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:16px;">
+          <div class="toggle-row" onclick="toggleJaTem('chip')" style="padding:16px 0;border-bottom:1px solid var(--gray-border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:44px;height:44px;background:var(--gray);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📱</div>
+              <span class="toggle-label">Chip de internet</span>
+            </div>
+            <div class="toggle" id="toggleChip"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="toggle-row" onclick="toggleJaTem('carro')" style="padding:16px 0;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:44px;height:44px;background:var(--gray);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🚗</div>
+              <span class="toggle-label">Aluguel de carro</span>
+            </div>
+            <div class="toggle" id="toggleCarro"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:13px;color:var(--gray-text);margin-bottom:24px;">💡 Não se preocupe! Vamos incluir tudo no seu roteiro com os melhores preços.</p>
+      <div class="btn-row">
+        <button class="btn-back" onclick="goToStep(3)">← Voltar</button>
+        <button class="btn-primary" onclick="goToStep(5)">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5 - Email e contato -->
+    <div class="step" id="step5">
       <div class="step-title">
         <h1>Quase lá! 🎉</h1>
         <p>Onde enviamos seu roteiro personalizado?</p>
@@ -388,7 +449,7 @@
         <span class="icon">📧</span>
         <div>
           <p class="title">Importante!</p>
-          <p class="text">Enviaremos seu roteiro completo por e-mail, para que você o tenha guardado e possa compartilhar com quem quiser. Certifique-se de digitar o e-mail corretamente!</p>
+          <p class="text">Enviaremos seu roteiro completo por e-mail e WhatsApp, para que você o tenha guardado e possa compartilhar com quem quiser. Certifique-se de digitar o e-mail e o WhatsApp corretamente!</p>
         </div>
       </div>
       <div class="card">
@@ -426,7 +487,7 @@
             </select>
             <input type="tel" id="celular" placeholder="(11) 99999-9999" style="flex:1;">
           </div>
-          <p class="hint">📲 Enviaremos um aviso por SMS quando seu roteiro ficar pronto, pois muitas vezes vai para o spam.</p>
+          <p class="hint">📲 Enviaremos seu roteiro por WhatsApp quando ficar pronto!</p>
         </div>
       </div>
       <div class="resumo" id="resumo">
@@ -435,7 +496,7 @@
       </div>
       <div id="errorMsg" class="error-msg"></div>
       <div class="btn-row">
-        <button class="btn-back" onclick="goToStep(3)">← Voltar</button>
+        <button class="btn-back" onclick="goToStep(4)">← Voltar</button>
         <button class="btn-primary" id="btnGenerate" disabled onclick="handleSubmit()">✨ Gerar Meu Roteiro</button>
       </div>
     </div>
@@ -468,7 +529,7 @@
     const state = {
       step: 1, destino: '', dataChegada: '', dataPartida: '', duracaoDias: 0,
       quantasPessoas: 2, viajantes: 'casal', criancas: false, orcamento: 'moderado',
-      interesses: [], primeiraVez: true, nome: '', email: '', celular: '', isGenerating: false
+      interesses: [], primeiraVez: true, jaTem: [], nome: '', email: '', celular: '', isGenerating: false
     };
 
     function goToStep(n) {
@@ -479,12 +540,12 @@
       state.step = n;
       window.parent.postMessage({ type: 'grupodicas_form', event: 'form_step_' + n }, '*');
       updateDots();
-      if (n === 4) buildResumo();
+      if (n === 5) buildResumo();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function updateDots() {
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 5; i++) {
         document.getElementById('dot' + i).className = i <= state.step ? 'step-dot active' : 'step-dot inactive';
       }
     }
@@ -545,15 +606,25 @@
     }
     function togglePrimeiraVez() { state.primeiraVez = !state.primeiraVez; document.getElementById('togglePrimeiraVez').classList.toggle('on', state.primeiraVez); }
 
-    document.getElementById('nome').addEventListener('input', function() { state.nome = this.value; updateStep4Btn(); });
-    document.getElementById('email').addEventListener('input', function() { state.email = this.value; updateStep4Btn(); });
+    // Step 4 - Já reservou
+    function toggleJaTem(item) {
+      var idx = state.jaTem.indexOf(item);
+      if (idx > -1) { state.jaTem.splice(idx, 1); }
+      else { state.jaTem.push(item); }
+      var toggleId = 'toggle' + item.charAt(0).toUpperCase() + item.slice(1);
+      document.getElementById(toggleId).classList.toggle('on', state.jaTem.includes(item));
+    }
+
+    // Step 5 - Email e contato
+    document.getElementById('nome').addEventListener('input', function() { state.nome = this.value; updateStep5Btn(); });
+    document.getElementById('email').addEventListener('input', function() { state.email = this.value; updateStep5Btn(); });
     document.getElementById('celular').addEventListener('input', function() {
       var code = document.getElementById('paisCode').value;
       var num = this.value.replace(/\D/g, '');
       state.celular = num ? code + num : '';
     });
 
-    function updateStep4Btn() {
+    function updateStep5Btn() {
       const valid = state.nome.trim() !== '' && state.email.trim() !== '' && state.email.includes('@');
       document.getElementById('btnGenerate').disabled = !valid || state.isGenerating;
     }
@@ -603,6 +674,7 @@
         orcamento: maps.orcamento[state.orcamento] || state.orcamento,
         interesses: state.interesses.map(i => maps.interesses[i] || i).join(', '),
         primeiraVez: state.primeiraVez,
+        jaTem: state.jaTem.join(', '),
         celular: celularCompleto
       };
 
@@ -617,14 +689,14 @@
       document.getElementById('successTitle').textContent = 'Seu roteiro está sendo criado, ' + firstName + '!';
       document.getElementById('successDestino').textContent = state.destino;
       document.getElementById('successDatas').textContent = formatDate(state.dataChegada) + ' → ' + formatDate(state.dataPartida) + ' • ' + state.duracaoDias + ' dias';
-      document.getElementById('successEmail').innerHTML = '📧 Enviaremos para <strong>' + state.email + '</strong>';
+      document.getElementById('successEmail').innerHTML = '📧 Enviaremos para <strong>' + state.email + '</strong> e pelo WhatsApp';
       document.getElementById('successScreen').classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       window.parent.postMessage({ type: 'grupodicas_form', event: 'form_success' }, '*');
     }
 
     function resetForm() {
-      Object.assign(state, { destino:'', dataChegada:'', dataPartida:'', duracaoDias:0, quantasPessoas:2, viajantes:'casal', criancas:false, orcamento:'moderado', interesses:[], primeiraVez:true, nome:'', email:'', celular:'', isGenerating:false, step:1 });
+      Object.assign(state, { destino:'', dataChegada:'', dataPartida:'', duracaoDias:0, quantasPessoas:2, viajantes:'casal', criancas:false, orcamento:'moderado', interesses:[], primeiraVez:true, jaTem:[], nome:'', email:'', celular:'', isGenerating:false, step:1 });
       ['destino','dataChegada','dataPartida','nome','email','celular'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('pessoasValue').textContent = '2';
       document.getElementById('pessoasLabel').textContent = 'pessoas';
@@ -641,6 +713,7 @@
       document.querySelectorAll('.interesse-btn').forEach(b => b.classList.remove('selected'));
       document.getElementById('toggleCriancas').classList.remove('on');
       document.getElementById('togglePrimeiraVez').classList.add('on');
+      ['Hotel','Ingressos','Seguro','Chip','Carro'].forEach(function(t) { document.getElementById('toggle'+t).classList.remove('on'); });
       document.getElementById('successScreen').classList.remove('visible');
       document.getElementById('stepIndicator').style.display = 'flex';
       document.getElementById('step1').classList.add('visible');
